@@ -1,0 +1,15 @@
+{{template "header.html"}}
+<a href="/class/classlist">User List</a>
+    <form href="/class/{{.Class.ID}}/update" method="POST">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
+<label for="class_name">class Name</label>
+<input id="class_name" type="text" name="ClassName" value="{{.Class.ClassName}}">
+{{ with (index .FormError "class_name") }}
+<p style="color: red;">{{.}}</p>
+{{end}}
+<br>
+        <button type="submit">Update</button>
+    </form>
+{{ template "footer.html"}}

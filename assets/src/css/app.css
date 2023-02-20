@@ -1,0 +1,27 @@
+.content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 200px;
+  margin: 40px auto;
+}
+
+.pagination {
+  list-style: none;
+  display: flex;
+}
+
+.pagination li {
+  background: rgb(129, 72, 72);
+  padding: 4px 8px;
+  margin-right: 5px;
+}
+
+.pagination li a {
+  color: white;
+}
+
+.pagination li.active {
+  background: rgb(73, 17, 216);
+}
+

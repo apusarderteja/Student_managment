@@ -1,0 +1,63 @@
+
+{{template "header.html"}}
+<br>
+<br>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@1.9.6/dist/tailwind.min.css">
+  <title>List User</title>
+</head>
+<body class="p-4">
+  <a href="/users/create" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400">Create New User</a>
+  <table class="w-full mt-4 text-left table-auto">
+    <thead>
+      <tr class="bg-gray-800 text-white">
+        <th class="px-4 py-2">First Name</th>
+        <th class="px-4 py-2">Last Name</th>
+        <th class="px-4 py-2">Username</th>
+        <th class="px-4 py-2">Email</th>
+        <th class="px-4 py-2">Status</th>
+        <th class="px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Users}}
+      <tr class="{{if .Status}}bg-green-300{{else}}bg-red-300{{end}}">
+        <td class="border px-4 py-2">{{ .FirstName }}</td>
+        <td class="border px-4 py-2">{{ .LastName }}</td>
+        <td class="border px-4 py-2">{{ .Username }}</td>
+        <td class="border px-4 py-2">{{ .Email }}</td>
+        <td class="border px-4 py-2">{{ if .Status}}Active{{else}}Inactive{{end}}</td>
+        <td class="border px-4 py-2">
+          <a href="/users/{{.ID}}/edit" class="text-blue-500 hover:underline">Edit</a>
+          <a href="/users/{{.ID}}/delete" class="text-red-500 hover:underline ml-2">Delete</a>
+        </td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  <br>
+  <a href="/logout" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-400 mt-4">Logout</a>
+</body>
+</html>
+<br>
+<br>
+<br>
+<ul class="pagination">
+    {{$prev:= calculatePreviousPage .CurrentPage}}
+    <li><a href="{{if $prev}}/users?page={{$prev}}{{else}}javascript:;{{end}}">Prev</a></li>
+    {{ range $i := until .TotalPage }}
+    {{$page := add $i 1}}
+    <li class="{{if eq $page $.CurrentPage}}active{{end}}">
+        <a href="{{if eq $page $.CurrentPage}}javascript:;{{else}}/users?page={{$page}}{{end}}">{{$page}}</a>
+    </li>
+    {{end}}
+
+    {{$next:= calculateNextPage .CurrentPage .TotalPage}}
+    <li><a href="{{if $next}}/users?page={{$next}}{{else}}javascript:;{{end}}">Next</a></li>
+</ul>
+{{ template "footer.html"}}

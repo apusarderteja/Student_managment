@@ -1,0 +1,15 @@
+{{template "header.html"}}
+<a href="/sub/sublist">Subject List</a>
+    <form href="/sub/{{.Subject.ID}}/update" method="POST">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
+<label for="subject_name">Subject Name</label>
+<input id="subject_name" type="text" name="SubjectName" value="{{.Subject.SubjectName}}">
+{{ with (index .FormError "subject_name") }}
+<p style="color: red;">{{.}}</p>
+{{end}}
+<br>
+        <button type="submit">Update</button>
+    </form>
+{{ template "footer.html"}}

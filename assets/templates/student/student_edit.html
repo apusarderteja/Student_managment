@@ -1,0 +1,21 @@
+{{template "header.html"}}
+<a href="/student/studentlist">Student List</a>
+    <form href="/student/{{.Student.ID}}/update" method="POST">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
+<label for="first_name">First Name</label>
+<input id="first_name" type="text" name="FirstName" value="">
+
+<br>
+<label for="last_name">Last Name</label>
+<input id="last_name" type="text" name="LastName" value="">
+
+<br>
+<label for="roll">Roll</label>
+<input id="roll" type="number" name="Roll" value="">
+
+<br>
+        <button type="submit">Update</button>
+    </form>
+{{ template "footer.html"}}
