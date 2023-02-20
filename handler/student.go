@@ -78,9 +78,6 @@ func (h Handler) StudentStore(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 
-	fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-	fmt.Println(stID.ID)
-	fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 
 	erraa := h.StuSub(w, r, student.ClassID, stID.ID)
 	if erraa != nil {
@@ -155,9 +152,6 @@ func (h Handler) UpdateStudent(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
-	fmt.Println("#################################")
-	fmt.Println(student)
-	fmt.Println("#################################")
 	// form.Student = student
 	// if err := student.Validate(); err != nil {
 	// 	if vErr, ok := err.(validation.Errors); ok {
