@@ -1,21 +1,17 @@
 package handler
 
 import (
-	// "html/template"
-	// "fmt"
 	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 
-	// "strings"
 
 	"Student_managment/Project/storage"
 
 	"github.com/go-chi/chi"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 
-	// validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/justinas/nosurf"
 )
 
@@ -74,27 +70,6 @@ func (h Handler) ListClass(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
-	// var err error
-	// CurrentPage := 1
-	// pn := r.FormValue("page")
-	// if pn != "" {
-	// 	CurrentPage, err = strconv.Atoi(pn)
-	// 	if err != nil {
-	// 		CurrentPage = 1
-	// 	}
-	// }
-
-	// offset := 0
-	// if CurrentPage > 1 {
-	// 	offset = (CurrentPage * userListLimit) - userListLimit
-	// }
-
-	// st := r.FormValue("SearchTerm")
-	// uf := storage.UserFilter{
-	// 	SearchTerm: st,
-	// 	Offset:     offset,
-	// 	Limit:      userListLimit,
-	// }
 	
 	listCl, err := h.storage.ListClass()
 	if err != nil {
@@ -105,22 +80,6 @@ func (h Handler) ListClass(w http.ResponseWriter, r *http.Request) {
 	if t == nil {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
-
-	// total := 0
-	// if len(listUser) > 0 {
-	// 	total = listUser[0].Total
-	// }
-
-	// totalPage := int(math.Ceil(float64(total) / float64(userListLimit)))
-
-	// data := UserList{
-	// 	Users:       listUser,
-	// 	// SearchTerm:  st,
-	// 	// CurrentPage: CurrentPage,
-	// 	// Limit:       userListLimit,
-	// 	// Total:       total,
-	// 	// TotalPage:   totalPage,
-	// }
 
 	if err := t.Execute(w, listCl); err != nil {
 		log.Println(err)

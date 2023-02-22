@@ -16,7 +16,7 @@
   <table class="w-full mt-4 text-left table-auto">
     <thead>
       <tr class="bg-gray-800 text-white">
-        <th class="px-8 py-2">ID</th>
+        <!-- <th class="px-8 py-2">ID</th> -->
         <th class="px-8 py-2">Class Name</th>
         <th class="px-8 py-2">First Name</th>
         <th class="px-8 py-2">Last Name</th>
@@ -26,13 +26,14 @@
     </thead>
     <tbody>
       {{range .}}
-      <td class="border px-4 py-2">{{ .ID }}</td>
         <td class="border px-4 py-2">{{ .ClassName }}</td>
         <td class="border px-4 py-2">{{ .FirstName }}</td>
         <td class="border px-4 py-2">{{ .LastName }}</td>
         <td class="border px-4 py-2">{{ .Roll }}</td>
 
         <td class="border px-8 py-4">
+          <a href="/student/{{.ID}}/mark-add" class="text-red-500 hover:underline ml-2">Add Mark</a>
+
             <a href="/student/{{.ID}}/edit-student" class="text-blue-500 hover:underline">Edit</a>
             <a href="/student/{{.ID}}/deletestudent" class="text-red-500 hover:underline ml-2">Delete</a>
         </td>

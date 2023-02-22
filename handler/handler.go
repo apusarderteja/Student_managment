@@ -55,6 +55,8 @@ type dbStorage interface {
 	//StudentSubject
 	CreateStudentSubject(s storage.StudentSubject) (*storage.StudentSubject, error)
 	GetSubIdBYID(classID int) ([]storage.Subject, error)
+	GetStudentIdBySubjectID(student_id string) ([]storage.StudentSubject, error)
+	UpdateStudentMark(u storage.StudentSubject) (*storage.StudentSubject, error)
 }
 
 type responseWriter struct {
@@ -119,7 +121,6 @@ func NewHandler(sm *scs.SessionManager, formDecoder *form.Decoder, storage dbSto
 
 	r.Group(func(r chi.Router) {
 		r.Use(sm.LoadAndSave)
-		r.Get("/", h.Home)
 		r.Get("/login", h.Login)
 		r.Post("/login", h.LoginPostHandler)
 	})
@@ -169,6 +170,11 @@ func NewHandler(sm *scs.SessionManager, formDecoder *form.Decoder, storage dbSto
 			r.Get("/{id:[0-9]+}/edit-student", h.EditStudent)
 			r.Put("/{id:[0-9]+}/edit-student", h.UpdateStudent)
 			r.Get("/{id:[0-9]+}/deletestudent", h.DeleteStudent)
+
+			r.Get("/{id:[0-9]+}/mark-add", h.AddMark)
+			r.Post("/mark-store", h.MarkStore)
+
+
 
 		})
 

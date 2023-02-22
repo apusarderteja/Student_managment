@@ -7,6 +7,8 @@ import (
 	"Student_managment/Project/storage"
 )
 
+//  student insert query
+
 const insertStudentQuery = `
 		INSERT INTO students(
 			class_id,
@@ -35,6 +37,11 @@ func (p PostgresStorage) CreateStudent(s storage.Student) (*storage.Student, err
 
 	return &s, nil
 }
+
+
+
+//  student insert query
+
 
 const getStudentByIdQuery = `SELECT * FROM students WHERE id=$1;`
 

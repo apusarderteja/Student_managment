@@ -6,12 +6,14 @@
 <p style="color: red;">{{.}}</p>
 {{end}}
 <br>
+<br>
 
 <label for="last_name">Last Name</label>
 <input id="last_name" type="text" name="LastName" value="{{.User.LastName}}">
 {{ with (index .FormError "last_name") }}
 <p style="color: red;">{{.}}</p>
 {{end}}
+<br>
 <br>
 
 <label for="email">Email</label>
@@ -20,12 +22,14 @@
 <p style="color: red;">{{.}}</p>
 {{end}}
 <br>
+<br>
 
 <label for="username">Username</label>
 <input id="username" type="text" {{if .User.ID }} readonly="" {{end}} name="Username" value="{{.User.Username}}">
 {{ with (index .FormError "username") }}
 <p style="color: red;">{{.}}</p>
 {{end}}
+<br>
 <br>
 
 {{if eq .User.ID 0}}
@@ -34,6 +38,7 @@
 {{ with (index .FormError "password") }}
 <p style="color: red;">{{.}}</p>
 {{end}}
+<br>
 <br>
 {{end}}
 

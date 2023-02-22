@@ -3,7 +3,7 @@
 <br>
 <br>
 <br>
-
+ 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +11,7 @@
 <head>
     <style>
         body {
-            background-image: url("/static/create.jpg");
+            background-image: url("/static/logo.jpg");
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -28,8 +28,10 @@
 <body>
     <form action="/student/studentstore" method="post">
         <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
-        <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
-            <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Create Student</h2>
+        <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-red-800">
+            <h2 class="text-xl font-semibold text-gray-700 capitalize dark:text-white">Create Student</h2>
+            <br>
+            <br>
 
 
             <label for="">Select a class</label>

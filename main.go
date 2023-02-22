@@ -20,26 +20,7 @@ import (
 
 var sessionManager *scs.SessionManager
 
-var schema = `
-CREATE TABLE IF NOT EXISTS users (
-    id BIGSERIAL,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    username TEXT NOT NULL,
-    email TEXT NOT NULL,
-    password TEXT NOT NULL,
-	status BOOLEAN DEFAULT TRUE,
-	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	deleted_at TIMESTAMP DEFAULT NULL,
 
-	PRIMARY KEY(id),
-	UNIQUE(username),
-	UNIQUE(email)
-);
-
-
-`
 
 func main() {
 	config := viper.NewWithOptions(
@@ -81,7 +62,6 @@ func main() {
 
 	chi := handler.NewHandler(sessionManager, decoder, postgreStorage)
 	p := config.GetInt("server.port")
-	// GET POST PUT PATCH DELETE
 	nosurfHandler := nosurf.New(chi)
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", p), nosurfHandler); err != nil {
 		log.Fatalf("%#v", err)

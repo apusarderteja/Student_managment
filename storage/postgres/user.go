@@ -8,6 +8,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// list user query
+
 const listQuery = `
 	WITH tot AS (select count(*) as total FROM users
 	WHERE
@@ -33,6 +35,7 @@ func (s PostgresStorage) ListUser(uf storage.UserFilter) ([]storage.User, error)
 }
 
 
+// insert user query
 
 const insertQuery = `
 		INSERT INTO users(
@@ -74,7 +77,7 @@ func (s PostgresStorage) CreateUser(u storage.User) (*storage.User, error) {
 
 
 
-
+// user update query
 const updateUserQuery = `
 	UPDATE users SET
 		first_name = :first_name,
@@ -94,7 +97,7 @@ func (s PostgresStorage) UpdateUser(u storage.User) (*storage.User, error) {
 	}
 	return &u, nil
 }
-
+// for edit found user query
 const getUserByIDQuery = `SELECT * FROM users WHERE id=$1 AND deleted_at IS NULL`
 
 func (s PostgresStorage) GetUserByID(id string) (*storage.User, error) {
@@ -107,7 +110,7 @@ func (s PostgresStorage) GetUserByID(id string) (*storage.User, error) {
 	return &u, nil
 }
 
-
+// login query
 const getUserByUsernameQuery = `SELECT * FROM users WHERE username=$1 AND deleted_at IS NULL`
 
 func (s PostgresStorage) GetUserByUsername(username string) (*storage.User, error) {

@@ -15,7 +15,7 @@ import (
 	"github.com/justinas/nosurf"
 )
 
-const userListLimit = 2
+const userListLimit = 4
 
 type UserList struct {
 	Users       []storage.User

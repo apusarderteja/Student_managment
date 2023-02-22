@@ -1,19 +1,37 @@
+{{template "header.html"}}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <style>
+        body {
+          background-color: #7ad2e1;
+        }
+        form {
+          background-color: rgb(101, 136, 130);
+          padding: 20px;
+          border-radius: 5px;
+          box-shadow: 0px 0px 10px #888888;
+        }
+      </style>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Create {{ title "Test title" }}</title>
+    <title>User Create </title>
 </head>
 
 <body>
     <a href="/users">User List</a>
+    <br>
+    <br>
+
     <form action="/users/store" method="post">
         {{template "_form.html" .}}
-        <button type="submit">Create</button>
+        <br>
+        <br>
+        <button  type="submit">Create</button>
     </form>
 </body>
 
 </html>
+{{ template "footer.html"}}

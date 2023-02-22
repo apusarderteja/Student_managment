@@ -14,8 +14,8 @@
         <label for="class">Class</label>
         <input type="text" name="ClassName" value="{{.Class.ClassName}}">
         {{ with (index .FormError "class_name") }}
-<p style="color: red;">{{.}}</p>
-{{end}}
+          <p style="color: red;">{{.}}</p>
+          {{end}}
         <br>
         <br>
 

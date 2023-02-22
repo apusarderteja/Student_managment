@@ -1,13 +1,10 @@
 package handler
 
 import (
-	// "html/template"
 	"fmt"
 	"log"
 	"net/http"
 	"strconv"
-
-	// "strings"
 
 	"Student_managment/Project/storage"
 
@@ -24,6 +21,8 @@ type StudentForm struct {
 	CSRFToken  string
 }
 
+// FOR STUDENT CREATE 
+// FOR STUDENT CREATE 
 func (h Handler) CreateStudent(w http.ResponseWriter, r *http.Request) {
 	classlist, err := h.storage.GetClassByIDQuery()
 	if err != nil {
@@ -36,6 +35,9 @@ func (h Handler) CreateStudent(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+
+// FOR STUDENT STORE 
+// FOR STUDENT STORE 
 func (h Handler) StudentStore(w http.ResponseWriter, r *http.Request) {
 
 	if err := r.ParseForm(); err != nil {
@@ -50,7 +52,6 @@ func (h Handler) StudentStore(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 
 	}
-	fmt.Println(student)
 
 	classlist, err := h.storage.GetClassByIDQuery()
 	if err != nil {
@@ -78,7 +79,6 @@ func (h Handler) StudentStore(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 
-
 	erraa := h.StuSub(w, r, student.ClassID, stID.ID)
 	if erraa != nil {
 		log.Println(erraa)
@@ -90,7 +90,8 @@ func (h Handler) StudentStore(w http.ResponseWriter, r *http.Request) {
 }
 
 
-
+//FOR SHOWING STUDENT LIST
+//FOR SHOWING STUDENT LIST
 func (h Handler) ListStudent(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		log.Println(err)
@@ -98,7 +99,6 @@ func (h Handler) ListStudent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	liststudent, err := h.storage.ListStudentQuery()
-	fmt.Println(liststudent)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
@@ -113,6 +113,9 @@ func (h Handler) ListStudent(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+
+// FOR DELETE STUDENT
+// FOR DELETE STUDENT
 func (h Handler) DeleteStudent(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
@@ -146,25 +149,25 @@ func (h Handler) UpdateStudent(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 
-	// var form StudentForm
+	var form StudentForm
 	student := storage.Student{ID: uID}
 	if err := h.decoder.Decode(&student, r.PostForm); err != nil {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
-	// form.Student = student
-	// if err := student.Validate(); err != nil {
-	// 	if vErr, ok := err.(validation.Errors); ok {
-	// 		student.FormError = vErr
-	// 		fmt.Println(student.FormError)
-	// 	}
-	// 	h.pareseEditSubjectTemplate(w, SubjectForm{
-	// 		Student:     student,
-	// 		CSRFToken: nosurf.Token(r),
-	// 		FormError: student.FormError,
-	// 	})
-	// 	return
-	// }
+	form.Student = student
+	if err := student.Validate(); err != nil {
+		if vErr, ok := err.(validation.Errors); ok {
+			student.FormError = vErr
+			fmt.Println(student.FormError)
+		}
+		h.pareseStudentEditTemplate(w, StudentForm{
+			Student:     student,
+			CSRFToken: nosurf.Token(r),
+			FormError: student.FormError,
+		})
+		return
+	}
 
 	_, err = h.storage.UpdateStudent(student)
 	if err != nil {

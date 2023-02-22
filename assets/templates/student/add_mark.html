@@ -1,0 +1,44 @@
+{{template "header.html"}}
+<br>
+<br>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@1.9.6/dist/tailwind.min.css">
+  <title>Studednt List</title>
+</head>
+
+<body class="p-4">
+  <a href="/student" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400">Create Student</a>
+  <form action="/student/mark-store" method="post">
+
+  <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+  <input type="hidden" name="StudentId" value="{{.StudentId}}">
+
+  <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+    {{range .Mark}}
+      <div>
+        <label class="text-gray-700 dark:text-gray-200" for="username">{{ .SubjectName}}</label>
+        <input type="number" name="Marksa[{{.SubjectId}}]" value=""
+          class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+      </div>
+    {{end}}
+
+    <button type="submit">Create</button>
+    <br>
+</div>
+</form>
+  </div>
+  <br>
+  <a href="/logout" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-400 mt-4">Logout</a>
+</body>
+
+</html>
+<br>
+<br>
+
+{{ template "footer.html"}}

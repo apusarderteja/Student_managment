@@ -7,6 +7,8 @@ import (
 	"Student_managment/Project/storage"
 )
 
+
+// insert subject query
 const insertQuerySubject = `
 		INSERT INTO subjects(
 			class_id,
@@ -33,10 +35,11 @@ func (p PostgresStorage) AddSubject(s storage.Subject) (*storage.Subject, error)
 }
 
 
+// list subject query
 
 const listSubjectQuery =  `SELECT subjects.id, class.class_name, subjects.subject_name 
 FROM subjects
-INNER JOIN class ON class.id = subjects.class_id;`
+INNER JOIN class ON class.id = subjects.class_id WHERE subjects.deleted_at IS NULL AND class.deleted_at IS NULL;`
 
 func (s PostgresStorage) ListSubjectQuery() ([]storage.Subject, error) {
 	var listsubject []storage.Subject
@@ -49,6 +52,7 @@ func (s PostgresStorage) ListSubjectQuery() ([]storage.Subject, error) {
 }
 
 
+// for edit subject id query
 
 const getsubjectIDByIDQuery = `SELECT * FROM subjects WHERE id=$1 AND deleted_at IS NULL`
 
@@ -61,6 +65,9 @@ func (s PostgresStorage) GetsubjectIDByIDQuery(id string) (*storage.Subject, err
 
 	return &u, nil
 }
+
+//  subject update query
+
 const updateSubjectQuery = `
 	UPDATE subjects SET
 	subject_name = :subject_name
@@ -79,6 +86,7 @@ func (s PostgresStorage) UpdateSubjectFUNC(u storage.Subject) (*storage.Subject,
 	return &u, nil
 }
 
+//  subject delete query
 
 const deleteSubjectByIdQuery = `UPDATE subjects SET deleted_at = CURRENT_TIMESTAMP WHERE id=$1 AND deleted_at IS NULL`
 

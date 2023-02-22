@@ -1,7 +1,6 @@
 package postgres
 
 import (
-	// "fmt"
 	"fmt"
 	"log"
 
@@ -35,7 +34,7 @@ func (p PostgresStorage) CreateStudentSubject(s storage.StudentSubject) (*storag
 }
 
 
-const getStudentSubjectByStudentQuery = `SELECT * FROM student_subject WHERE student_id=$1;`
+const getStudentSubjectByStudentQuery = `SELECT * FROM student_subject WHERE student_id=$1 AND deleted_at IS NULL;`
 
 func (s PostgresStorage) GetStudentSubjectByStudentID(id string) ([]storage.StudentSubject, error) {
 	var u []storage.StudentSubject
@@ -49,17 +48,17 @@ func (s PostgresStorage) GetStudentSubjectByStudentID(id string) ([]storage.Stud
 
 
 
-const updateStudentSubjectQuery = `
+const updateStudentMarkQuery = `
 	UPDATE student_subject SET
 		student_id = :student_id,
 		subject_id = :subject_id,
 		marks = :marks
-	WHERE id = :id
+	WHERE student_id = :student_id AND subject_id = :subject_id
 		 RETURNING *;
 	`
 
-func (s PostgresStorage) UpdateStudentSubject(u storage.StudentSubject) (*storage.StudentSubject, error) {
-	stmt, err := s.DB.PrepareNamed(updateStudentSubjectQuery)
+func (s PostgresStorage) UpdateStudentMark(u storage.StudentSubject) (*storage.StudentSubject, error) {
+	stmt, err := s.DB.PrepareNamed(updateStudentMarkQuery)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -98,33 +97,9 @@ func (s PostgresStorage) DeleteStudentSubjectByID(id string) error {
 
 
 
-// const listclassQuery =  `SELECT * FROM class WHERE deleted_at IS NULL ORDER BY id DESC`
-
-// func (s PostgresStorage) ListClass() ([]storage.Class, error) {
-// 	var listCl []storage.Class
-// 	if err := s.DB.Select(&listCl, listclassQuery); err != nil {
-// 		log.Println(err)
-// 		return nil, err
-// 	}
-
-// 	return listCl, nil
-// }
-
-// const getclassIDByIDQuery = `SELECT * FROM class WHERE id=$1 AND deleted_at IS NULL`
-
-// func (s PostgresStorage) GetclassIDByIDQuery(id string) (*storage.Class, error) {
-// 	var u storage.Class
-// 	if err := s.DB.Get(&u, getclassIDByIDQuery, id); err != nil {
-// 		log.Println(err)
-// 		return nil, err
-// 	}
-
-// 	return &u, nil
-// }
 
 
-
-const getStuIdBySubQuery = `SELECT * FROM subjects WHERE class_id= $1;`
+const getStuIdBySubQuery = `SELECT * FROM subjects WHERE class_id= $1 AND deleted_at IS NULL;`
 
 func (s PostgresStorage) GetSubIdBYID(classID int) ([]storage.Subject, error) {
 	var u []storage.Subject
@@ -136,12 +111,18 @@ func (s PostgresStorage) GetSubIdBYID(classID int) ([]storage.Subject, error) {
 	return u, nil
 }
 
-// func (s PostgresStorage) ListStudentQuery() ([]storage.Student, error) {
-// 	var liststudent []storage.Student
-// 	if err := s.DB.Select(&liststudent, listStudentQuery); err != nil {
-// 		log.Println(err)
-// 		return nil, err
-// 	}
 
-// 	return liststudent, nil
-// }
+const getStudentIdBySubjectID = `SELECT  sts.* , sub.subject_name
+FROM student_subject as sts
+INNER JOIN subjects as sub ON sts.subject_id = sub.id
+WHERE sts.student_id =$1;`
+
+func (s PostgresStorage) GetStudentIdBySubjectID(student_id string) ([]storage.StudentSubject, error) {
+	var u []storage.StudentSubject
+	if err := s.DB.Select(&u, getStudentIdBySubjectID,student_id); err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return u, nil
+}
