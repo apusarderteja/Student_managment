@@ -2,15 +2,12 @@ package handler
 
 import (
 	"Student_managment/Project/storage"
-	"fmt"
-	// "database/sql"
+	
 	"log"
 	"net/http"
 
-	// "time"
 
 	"github.com/go-chi/chi"
-	// "github.com/justinas/nosurf"
 	"github.com/justinas/nosurf"
 )
 
@@ -58,9 +55,7 @@ func (h Handler) MarkStore(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 
 	}
-	fmt.Println("============")
-	fmt.Println(markk.Marksa)
-	fmt.Println("============")
+
 
 	for t, y := range markk.Marksa {
 		dbphrm := storage.StudentSubject{
