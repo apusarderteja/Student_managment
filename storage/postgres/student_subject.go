@@ -7,7 +7,7 @@ import (
 	"Student_managment/Project/storage"
 )
 
-const insertstudentsubjectQuery = `
+const insertstudentMarkQuery = `
 		INSERT INTO student_subject(
 			student_id,
 			subject_id,
@@ -19,9 +19,9 @@ const insertstudentsubjectQuery = `
 		) RETURNING *;
 	`
 
-func (p PostgresStorage) CreateStudentSubject(s storage.StudentSubject) (*storage.StudentSubject, error) {
+func (p PostgresStorage) InsertstudentMarkQuery(s storage.StudentSubject) (*storage.StudentSubject, error) {
 
-	stmt, err := p.DB.PrepareNamed(insertstudentsubjectQuery)
+	stmt, err := p.DB.PrepareNamed(insertstudentMarkQuery)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -34,11 +34,15 @@ func (p PostgresStorage) CreateStudentSubject(s storage.StudentSubject) (*storag
 }
 
 
-const getStudentSubjectByStudentQuery = `SELECT * FROM student_subject WHERE student_id=$1 AND deleted_at IS NULL;`
+// const getStudentSubjectByStudentQuery = `SELECT * FROM student_subject WHERE student_id=$1 AND deleted_at IS NULL;`
+const getStudentSubjectByStudentQuery = `SELECT student_subject.student_id,student_subject.marks,  students.first_name ,students.last_name, students.roll
+FROM student_subject
+INNER JOIN students ON student_subject.student_id = students.id
+WHERE student_subject.deleted_at IS NULL AND students.deleted_at IS NULL;`
 
-func (s PostgresStorage) GetStudentSubjectByStudentID(id string) ([]storage.StudentSubject, error) {
+func (s PostgresStorage) GetStudentSubjectByStudentID() ([]storage.StudentSubject, error) {
 	var u []storage.StudentSubject
-	if err := s.DB.Select(&u, getStudentSubjectByStudentQuery,id); err != nil {
+	if err := s.DB.Select(&u, getStudentSubjectByStudentQuery); err != nil {
 		log.Println(err)
 		return nil, err
 	}
@@ -70,12 +74,32 @@ func (s PostgresStorage) UpdateStudentMark(u storage.StudentSubject) (*storage.S
 }
 
 
+const getStudentProfileQuery = `SELECT  student_subject.* , subjects.subject_name ,students.first_name ,students.last_name ,students.roll 
+FROM student_subject
+INNER JOIN students ON student_subject.student_id = students.id
+INNER JOIN subjects ON student_subject.subject_id = subjects.id
+WHERE student_subject.student_id =$1;`
 
 
-const deleteStudentSubjectByIdQuery = `UPDATE student_subject SET deleted_at = CURRENT_TIMESTAMP WHERE id=$1 AND deleted_at IS NULL`
+func (s PostgresStorage) GetStudentProfileQuery(StudentId string) ([]storage.StudentSubject, error) {
+	var u []storage.StudentSubject
+	if err := s.DB.Select(&u, getStudentProfileQuery , StudentId); err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
-func (s PostgresStorage) DeleteStudentSubjectByID(id string) error {
-	res, err := s.DB.Exec(deleteStudentSubjectByIdQuery, id)
+	return u, nil
+
+}
+	
+
+
+
+
+const deleteStudentSubjectByIdQuery = `UPDATE student_subject SET deleted_at = CURRENT_TIMESTAMP WHERE student_id=$1 AND deleted_at IS NULL`
+
+func (s PostgresStorage) DeleteStudentSubjectByID(StudentId string) error {
+	res, err := s.DB.Exec(deleteStudentSubjectByIdQuery, StudentId)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -112,10 +136,11 @@ func (s PostgresStorage) GetSubIdBYID(classID int) ([]storage.Subject, error) {
 }
 
 
-const getStudentIdBySubjectID = `SELECT  sts.* , sub.subject_name
-FROM student_subject as sts
-INNER JOIN subjects as sub ON sts.subject_id = sub.id
-WHERE sts.student_id =$1;`
+const getStudentIdBySubjectID = `SELECT  student_subject.* , subjects.subject_name
+FROM student_subject 
+INNER JOIN subjects 
+ON student_subject.subject_id = subjects.id
+WHERE student_subject.student_id =$1;`
 
 func (s PostgresStorage) GetStudentIdBySubjectID(student_id string) ([]storage.StudentSubject, error) {
 	var u []storage.StudentSubject

@@ -157,6 +157,9 @@ func (h Handler) pareseStudentEditTemplate(w http.ResponseWriter, data any) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 }
+
+// For Mark add  Template parese
+// For Mark add  Template parese
 func (h Handler) PareseMarkTemplate(w http.ResponseWriter, data any) {
 	t := h.Templates.Lookup("add_mark.html")
 	if t == nil {

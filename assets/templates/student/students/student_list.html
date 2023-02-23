@@ -9,7 +9,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@1.9.6/dist/tailwind.min.css">
-  <title>Studednt List</title>
+  <title>Student List</title>
 </head>
 <body class="p-4">
   <a href="/student" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400">Create Student</a>
@@ -21,6 +21,9 @@
         <th class="px-8 py-2">First Name</th>
         <th class="px-8 py-2">Last Name</th>
         <th class="px-8 py-2"> Roll</th>
+        <th class="px-8 py-2"> Mark Add</th>
+        <th class="px-8 py-2">Show</th>
+
         <th class="px-8 py-2">Action</th>
       </tr>
     </thead>
@@ -33,7 +36,12 @@
 
         <td class="border px-8 py-4">
           <a href="/student/{{.ID}}/mark-add" class="text-red-500 hover:underline ml-2">Add Mark</a>
+        </td>
+        <td class="border px-8 py-4">
+          <a href="/student/marklist" class="text-red-500 hover:underline ml-2"> Mark List</a>
+        </td>
 
+        <td class="border px-8 py-4">
             <a href="/student/{{.ID}}/edit-student" class="text-blue-500 hover:underline">Edit</a>
             <a href="/student/{{.ID}}/deletestudent" class="text-red-500 hover:underline ml-2">Delete</a>
         </td>

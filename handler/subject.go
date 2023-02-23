@@ -1,7 +1,6 @@
 package handler
 
 import (
-	
 	"fmt"
 	"log"
 	"net/http"
@@ -14,29 +13,26 @@ import (
 	"github.com/justinas/nosurf"
 )
 
-
-
 type SubjectForm struct {
-	Subject     storage.Subject
+	Subject storage.Subject
 	// Subjects []string
 	Classlists []storage.Class
-	Class storage.Class
-	FormError map[string]error
-	CSRFToken string
+	Class      storage.Class
+	FormError  map[string]error
+	CSRFToken  string
 }
 
 func (h Handler) AddSubject(w http.ResponseWriter, r *http.Request) {
-	classlist ,err := h.storage.GetClassByIDQuery()
-	if  err != nil {
+	classlist, err := h.storage.GetClassByIDQuery()
+	if err != nil {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 	h.pareseAddSubjectTemplate(w, SubjectForm{
-		Classlists : classlist,
-		CSRFToken: nosurf.Token(r),
+		Classlists: classlist,
+		CSRFToken:  nosurf.Token(r),
 	})
 }
-
 
 func (h Handler) SubjectStore(w http.ResponseWriter, r *http.Request) {
 
@@ -44,49 +40,45 @@ func (h Handler) SubjectStore(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
-	// form := SubjectForm{}
-	subject  := storage.Subject{}
-	// cl := storage.Class{}
+	subject := storage.Subject{}
 	if err := h.decoder.Decode(&subject, r.PostForm); err != nil {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
-		
-	}
 
-// form.Subject = subject
-classlist ,err := h.storage.GetClassByIDQuery()
-	if  err != nil {
+	}
+	fmt.Println("=====================================================",subject)
+
+	classlist, err := h.storage.GetClassByIDQuery()
+	if err != nil {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
-	
+
 	if err := subject.Validate(); err != nil {
 		if vErr, ok := err.(validation.Errors); ok {
 			subject.FormError = vErr
 
 		}
 		h.pareseAddSubjectTemplate(w, SubjectForm{
-			Subject:     subject,
-			Classlists : classlist,
-			CSRFToken: nosurf.Token(r),
-			FormError: subject.FormError,
+			Subject:    subject,
+			Classlists: classlist,
+			CSRFToken:  nosurf.Token(r),
+			FormError:  subject.FormError,
 		})
 		return
 	}
+	fmt.Println("==========================Validate===========================",subject)
+
 
 	_, eRr := h.storage.AddSubject(subject)
 	if eRr != nil {
-		log.Println(err)
+		// log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 
 	http.Redirect(w, r, "/sub/sublist", http.StatusSeeOther)
 
 }
-
-
-
-
 
 func (h Handler) EditSubject(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
@@ -96,31 +88,26 @@ func (h Handler) EditSubject(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 	h.pareseEditSubjectTemplate(w, SubjectForm{
-		Subject:     *sub,
+		Subject:   *sub,
 		CSRFToken: nosurf.Token(r),
 	})
 }
 
-
 func (h Handler) UpdateSubject(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-
-	
 
 	uID, err := strconv.Atoi(id)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
-	
+
 	var form SubjectForm
 	subject := storage.Subject{ID: uID}
 	if err := h.decoder.Decode(&subject, r.PostForm); err != nil {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
-
-
 
 	form.Subject = subject
 	if err := subject.Validate(); err != nil {
@@ -129,7 +116,7 @@ func (h Handler) UpdateSubject(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(subject.FormError)
 		}
 		h.pareseEditSubjectTemplate(w, SubjectForm{
-			Subject:     subject,
+			Subject:   subject,
 			CSRFToken: nosurf.Token(r),
 			FormError: subject.FormError,
 		})
@@ -145,14 +132,12 @@ func (h Handler) UpdateSubject(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/sub/sublist", http.StatusSeeOther)
 }
 
-
 func (h Handler) ListSubject(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
-	
-	
+
 	listsub, err := h.storage.ListSubjectQuery()
 	fmt.Println(listsub)
 	if err != nil {
@@ -164,15 +149,10 @@ func (h Handler) ListSubject(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 
-
-
 	if err := t.Execute(w, listsub); err != nil {
 		log.Println(err)
 	}
 }
-
-
-
 
 func (h Handler) DeleteSubject(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")

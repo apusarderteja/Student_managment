@@ -127,6 +127,8 @@ func (h Handler) DeleteStudent(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/student/studentlist", http.StatusSeeOther)
 }
 
+// FOR Edit STUDENT
+// FOR Edit STUDENT
 func (h Handler) EditStudent(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	studen, err := h.storage.GetstudentIDByIDQuery(id)
@@ -140,6 +142,8 @@ func (h Handler) EditStudent(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// FOR  STUDENT UPDATE
+// FOR  STUDENT UPDATE
 func (h Handler) UpdateStudent(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
@@ -177,18 +181,4 @@ func (h Handler) UpdateStudent(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/student/studentlist", http.StatusSeeOther)
 }
 
-func (h Handler) StuSub(w http.ResponseWriter, r *http.Request, classID int, stuID int) error {
-	sub, _ := h.storage.GetSubIdBYID(classID)
-	for _, val := range sub {
-		dbphrm := storage.StudentSubject{
-			StudentId: stuID,
-			SubjectId: val.ID,
-			Marks:     0,
-		}
-		_, err := h.storage.CreateStudentSubject(dbphrm)
-		fmt.Println(err)
 
-	}
-	return nil
-
-}

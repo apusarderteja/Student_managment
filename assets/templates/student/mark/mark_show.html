@@ -1,0 +1,51 @@
+
+{{template "header.html"}}
+<br>
+<br>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@1.9.6/dist/tailwind.min.css">
+  <title>Studednt List</title>
+</head>
+<body class="p-4">
+  <a href="/student" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-400">Create Student</a>
+  <table class="w-full mt-4 text-left table-auto">
+    <thead>
+      <tr class="bg-gray-800 text-white">
+        <!-- <th class="px-8 py-2">ID</th> -->
+        <th class="px-8 py-2">First Name</th>
+        <th class="px-8 py-2">Last Name</th>
+        <th class="px-8 py-2"> Roll</th>
+        <th class="px-8 py-2"> Mark</th>
+        <th class="px-8 py-2">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .}}
+        <td class="border px-4 py-2">{{ .FirstName }}</td>
+        <td class="border px-4 py-2">{{ .LastName }}</td>
+        <td class="border px-4 py-2">{{ .Roll }}</td>
+        <td class="border px-4 py-2">{{ .Marks }}</td>
+
+        <td class="border px-8 py-4">
+          <a href="/student/{{.StudentId}}/profile" class="text-red-500 hover:underline ml-2">Show Mark List</a>
+
+        <a href="/student/{{.StudentId}}/deletepro" class="text-red-500 hover:underline ml-2">Delete</a>
+        </td>
+       
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  <br>
+  <a href="/logout" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-400 mt-4">Logout</a>
+</body>
+</html>
+<br>
+<br>
+
+{{ template "footer.html"}}

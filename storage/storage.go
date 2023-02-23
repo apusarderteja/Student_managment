@@ -65,6 +65,10 @@ type StudentSubject struct {
 	ID          int          `json:"id" form:"-" db:"id"`
 	StudentId   int          `json:"student_id" db:"student_id"`
 	SubjectId   int          `json:"subject_id" db:"subject_id"`
+	ClassName string       `json:"class_name" db:"class_name"`
+	FirstName string       `json:"first_name" db:"first_name"`
+	LastName  string       `json:"last_name" db:"last_name"`
+	Roll      int          `json:"roll" db:"roll"`
 	Marks       int          `json:"marks" db:"marks"`
 	SubjectName string       `json:"subject_name" db:"subject_name"`
 	CreatedAt   time.Time    `json:"created_at" db:"created_at"`

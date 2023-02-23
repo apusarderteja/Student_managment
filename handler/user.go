@@ -31,7 +31,8 @@ type UserForm struct {
 	FormError map[string]error
 	CSRFToken string
 }
-
+// For Users List show
+// For Users List show
 func (h Handler) ListUser(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		log.Println(err)
@@ -97,7 +98,8 @@ func (h Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-
+// For Store Users
+// For Store Users
 func (h Handler) StoreUser(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		log.Println(err)
@@ -135,7 +137,8 @@ func (h Handler) StoreUser(w http.ResponseWriter, r *http.Request) {
 }
 
 
-
+//  For Edit Users
+//  For Edit Users
 func (h Handler) EditUser(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	editUser, err := h.storage.GetUserByID(id)
@@ -148,7 +151,8 @@ func (h Handler) EditUser(w http.ResponseWriter, r *http.Request) {
 	form.CSRFToken = nosurf.Token(r)
 	h.pareseEditUserTemplate(w, form)
 }
-
+// For Update Users
+// For Update Users
 func (h Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	uID, err := strconv.Atoi(id)
@@ -189,7 +193,8 @@ func (h Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 
-
+//For Users delete
+//For Users delete
 func (h Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 

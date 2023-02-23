@@ -53,10 +53,13 @@ type dbStorage interface {
 	UpdateStudent(u storage.Student) (*storage.Student, error)
 
 	//StudentSubject
-	CreateStudentSubject(s storage.StudentSubject) (*storage.StudentSubject, error)
+	InsertstudentMarkQuery(s storage.StudentSubject) (*storage.StudentSubject, error)
 	GetSubIdBYID(classID int) ([]storage.Subject, error)
 	GetStudentIdBySubjectID(student_id string) ([]storage.StudentSubject, error)
 	UpdateStudentMark(u storage.StudentSubject) (*storage.StudentSubject, error)
+	GetStudentSubjectByStudentID() ([]storage.StudentSubject, error)
+	DeleteStudentSubjectByID( string) error
+	GetStudentProfileQuery(StudentId string) ([]storage.StudentSubject, error)
 }
 
 type responseWriter struct {
@@ -173,6 +176,12 @@ func NewHandler(sm *scs.SessionManager, formDecoder *form.Decoder, storage dbSto
 
 			r.Get("/{id:[0-9]+}/mark-add", h.AddMark)
 			r.Post("/mark-store", h.MarkStore)
+			r.Get("/marklist", h.MarkListStudent)
+			r.Get("/{id:[0-9]+}/profile", h.ShowProfile)
+
+			r.Get("/{id:[0-9]+}/deletepro", h.DeleteProfileT)
+
+                 
 
 
 
