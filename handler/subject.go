@@ -15,7 +15,6 @@ import (
 
 type SubjectForm struct {
 	Subject storage.Subject
-	// Subjects []string
 	Classlists []storage.Class
 	Class      storage.Class
 	FormError  map[string]error
@@ -46,7 +45,6 @@ func (h Handler) SubjectStore(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 
 	}
-	fmt.Println("=====================================================",subject)
 
 	classlist, err := h.storage.GetClassByIDQuery()
 	if err != nil {
@@ -67,12 +65,11 @@ func (h Handler) SubjectStore(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-	fmt.Println("==========================Validate===========================",subject)
 
 
 	_, eRr := h.storage.AddSubject(subject)
 	if eRr != nil {
-		// log.Println(err)
+		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 

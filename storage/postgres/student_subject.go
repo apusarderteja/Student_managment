@@ -34,7 +34,6 @@ func (p PostgresStorage) InsertstudentMarkQuery(s storage.StudentSubject) (*stor
 }
 
 
-// const getStudentSubjectByStudentQuery = `SELECT * FROM student_subject WHERE student_id=$1 AND deleted_at IS NULL;`
 const getStudentSubjectByStudentQuery = `SELECT student_subject.student_id,student_subject.marks,  students.first_name ,students.last_name, students.roll
 FROM student_subject
 INNER JOIN students ON student_subject.student_id = students.id

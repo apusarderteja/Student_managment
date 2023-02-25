@@ -21,6 +21,7 @@
         <th class="px-8 py-2">Last Name</th>
         <th class="px-8 py-2"> Roll</th>
         <th class="px-8 py-2"> Mark</th>
+        <th class="px-8 py-2">Details</th>
         <th class="px-8 py-2">Action</th>
       </tr>
     </thead>
@@ -32,7 +33,12 @@
         <td class="border px-4 py-2">{{ .Marks }}</td>
 
         <td class="border px-8 py-4">
-          <a href="/student/{{.StudentId}}/profile" class="text-red-500 hover:underline ml-2">Show Mark List</a>
+         
+
+          <a href="/student/{{.StudentId}}/profile" class="text-red-500 hover:underline ml-2">Show Details</a>
+        </td> 
+        <td class="border px-8 py-4">
+         
 
         <a href="/student/{{.StudentId}}/deletepro" class="text-red-500 hover:underline ml-2">Delete</a>
         </td>

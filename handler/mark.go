@@ -21,7 +21,8 @@ type MarkForm struct {
 	FormError map[string]error
 	CSRFToken string
 }
-
+// For Add student mark
+// For Add student mark
 func (h Handler) AddMark(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	mark, err := h.storage.GetStudentIdBySubjectID(id)
@@ -44,6 +45,8 @@ func (h Handler) AddMark(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 }
+// For  student mark STORE
+// For  student mark STORE
 
 func (h Handler) MarkStore(w http.ResponseWriter, r *http.Request) {
 
@@ -66,7 +69,7 @@ func (h Handler) MarkStore(w http.ResponseWriter, r *http.Request) {
 			SubjectId: t,
 			Marks:     y,
 		}
-		fmt.Println(studetails)
+		
 
 		_, err := h.storage.UpdateStudentMark(studetails)
 		if err != nil {
@@ -110,7 +113,7 @@ func (h Handler) MarkListStudent(w http.ResponseWriter, r *http.Request) {
 		
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
-	fmt.Println(liststudentWithMark)
+	
 	t := h.Templates.Lookup("mark_show.html")
 	if t == nil {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
@@ -120,6 +123,8 @@ func (h Handler) MarkListStudent(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 }
+// STUDENT DELETE SHOW PROCESS
+// STUDENT DELETE SHOW PROCESS
 
 
 func (h Handler) DeleteProfileT(w http.ResponseWriter, r *http.Request ) {
@@ -134,7 +139,8 @@ func (h Handler) DeleteProfileT(w http.ResponseWriter, r *http.Request ) {
 }
 
 
-
+// STUDENT DETAILS SHOW PROCESS
+// STUDENT DETAILS SHOW PROCESS
 func (h Handler) ShowProfile(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		log.Println(err)
@@ -142,7 +148,6 @@ func (h Handler) ShowProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := chi.URLParam(r, "id")
-	fmt.Println(id)
 
 
 var profileWithMark []storage.StudentSubject

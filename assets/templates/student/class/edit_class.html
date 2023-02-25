@@ -1,5 +1,5 @@
 {{template "header.html"}}
-<a href="/class/classlist">User List</a>
+<a href="/class/classlist">Class List</a>
     <form href="/class/{{.Class.ID}}/update" method="POST">
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
