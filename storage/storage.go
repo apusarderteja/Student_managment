@@ -78,6 +78,8 @@ type StudentSubject struct {
 	FormError map[string]error
 }
 
+
+
 func (u User) Validate() error {
 	return validation.ValidateStruct(&u,
 		validation.Field(&u.FirstName,

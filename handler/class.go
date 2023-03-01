@@ -35,28 +35,44 @@ func (h Handler) StoreClass(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 	
-	cl := storage.Class{}
-	if err := h.decoder.Decode(&cl, r.PostForm); err != nil {
+	class := storage.Class{}
+	if err := h.decoder.Decode(&class, r.PostForm); err != nil {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 
-if err := cl.Validate(); err != nil {
+if err := class.Validate(); err != nil {
 	if vErr, ok := err.(validation.Errors); ok {
-		cl.FormError = vErr
-		fmt.Println(cl.FormError)
+		class.FormError = vErr
+		fmt.Println(class.FormError)
 	}
 	h.pareseClassTemplate(w, ClassForm{
-		Class:     cl,
+		Class:     class,
 		CSRFToken: nosurf.Token(r),
-		FormError: cl.FormError,
+		FormError: class.FormError,
 	})
 	return
 }
 
-	_, err := h.storage.CreateClass(cl)
+checkAlreadyExist, err := h.IsClassAlreadyExistsCheck(w, r, class.ClassName)
+
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
+		return
+	}
+	if checkAlreadyExist {
+		h.pareseClassTemplate(w, ClassForm{
+			Class:     class,
+			CSRFToken: nosurf.Token(r),
+			FormError: map[string]error{
+				"class_name": fmt.Errorf("The Class already Exist."),
+			}})
+		return
+	}
+
+	_, eXrr := h.storage.CreateClass(class)
+	if eXrr != nil {
+		log.Println(eXrr)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 
@@ -153,4 +169,14 @@ func (h Handler) DeleteClass(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/class/classlist", http.StatusSeeOther)
+}
+
+
+// For Class Already Exists Check By CLassname
+func (h Handler) IsClassAlreadyExistsCheck(w http.ResponseWriter, r *http.Request, ClassName string) (bool, error) {
+	Class, err := h.storage.CheckClassExists(ClassName)
+	if err != nil {
+		log.Fatalf("%v", err)
+	}
+	return Class, nil
 }

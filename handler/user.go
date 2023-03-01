@@ -117,7 +117,7 @@ func (h Handler) StoreUser(w http.ResponseWriter, r *http.Request) {
 	if err := user.Validate(); err != nil {
 		if vErr, ok := err.(validation.Errors); ok {
 			user.FormError = vErr
-			fmt.Println(user.FormError)
+			
 		}
 		h.pareseCreateUserTemplate(w, UserForm{
 			User:     user,
@@ -127,13 +127,13 @@ func (h Handler) StoreUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newUser, err := h.storage.CreateUser(user)
+	_, err := h.storage.CreateUser(user)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 
-	http.Redirect(w, r, fmt.Sprintf("/users/%v/edit", newUser.ID), http.StatusSeeOther)
+	http.Redirect(w, r, "/users", http.StatusSeeOther)
 }
 
 

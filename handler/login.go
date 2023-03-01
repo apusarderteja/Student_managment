@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"Student_managment/Project/storage/postgres"
+
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/justinas/nosurf"
 	"golang.org/x/crypto/bcrypt"
@@ -37,7 +38,7 @@ func (h Handler) Login(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (h Handler) LoginPostHandler(w http.ResponseWriter, r *http.Request) {
+func (h Handler) LoginPostHandler(w http.ResponseWriter, r *http.Request ) {
 	if err := r.ParseForm(); err != nil {
 		log.Println(err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
@@ -90,7 +91,7 @@ func (h Handler) LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	h.sessionManager.Put(r.Context(), "userID", strconv.Itoa(user.ID))
-	http.Redirect(w, r, "/users", http.StatusSeeOther)
+	http.Redirect(w, r, "/users/dashboard", http.StatusSeeOther )
 }
 
 

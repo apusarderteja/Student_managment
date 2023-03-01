@@ -157,13 +157,10 @@ func (h Handler) pareseStudentEditTemplate(w http.ResponseWriter, data any) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 }
-
-// For Mark add  Template parese
-// For Mark add  Template parese
-func (h Handler) PareseMarkTemplate(w http.ResponseWriter, data any) {
-	t := h.Templates.Lookup("add_mark.html")
+func (h Handler) DashboardTemplate(w http.ResponseWriter, data any) {
+	t := h.Templates.Lookup("dashboard.html")
 	if t == nil {
-		log.Println("unable to lookup add mark template")
+		log.Println("unable to lookup dashboard template")
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 
@@ -172,3 +169,4 @@ func (h Handler) PareseMarkTemplate(w http.ResponseWriter, data any) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 }
+

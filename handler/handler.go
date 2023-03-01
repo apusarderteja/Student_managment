@@ -39,6 +39,7 @@ type dbStorage interface {
 	GetClassByIDQuery() ([]storage.Class, error)
 	GetclassIDByIDQuery(id string) (*storage.Class, error)
 	Updateclass(storage.Class) (*storage.Class, error)
+	CheckClassExists(ClassName string) (bool, error)
 
 	AddSubject(storage.Subject) (*storage.Subject, error)
 	ListSubjectQuery() ([]storage.Subject, error)
@@ -115,7 +116,6 @@ func NewHandler(sm *scs.SessionManager, formDecoder *form.Decoder, storage dbSto
 	h.ParseTemplates()
 	r := chi.NewRouter()
 
-	// A good base middleware stack
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
@@ -124,6 +124,9 @@ func NewHandler(sm *scs.SessionManager, formDecoder *form.Decoder, storage dbSto
 
 	r.Group(func(r chi.Router) {
 		r.Use(sm.LoadAndSave)
+		r.Use(h.IsLogin)
+		r.Get("/users/create", h.CreateUser)
+		r.Post("/users/store", h.StoreUser)
 		r.Get("/login", h.Login)
 		r.Post("/login", h.LoginPostHandler)
 	})
@@ -135,12 +138,13 @@ func NewHandler(sm *scs.SessionManager, formDecoder *form.Decoder, storage dbSto
 	r.Group(func(r chi.Router) {
 		r.Use(sm.LoadAndSave)
 		r.Use(h.Authentication)
+		
 
 		r.Route("/users", func(r chi.Router) {
 			r.Get("/", h.ListUser)
+			r.Get("/dashboard", h.Dashboard)
 
-			r.Get("/create", h.CreateUser)
-			r.Post("/store", h.StoreUser)
+		
 			r.Get("/{id:[0-9]+}/edit", h.EditUser)
 			r.Put("/{id:[0-9]+}/update", h.UpdateUser)
 			r.Get("/{id:[0-9]+}/delete", h.DeleteUser)
@@ -181,10 +185,6 @@ func NewHandler(sm *scs.SessionManager, formDecoder *form.Decoder, storage dbSto
 
 			r.Get("/{id:[0-9]+}/deletepro", h.DeleteProfileT)
 
-                 
-
-
-
 		})
 
 		r.Get("/logout", h.LogoutHandler)
@@ -213,6 +213,10 @@ func Method(next http.Handler) http.Handler {
 func (h Handler) Authentication(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		userID := h.sessionManager.GetString(r.Context(), "userID")
+		if userID == "" {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
 		uID, err := strconv.Atoi(userID)
 		if err != nil {
 			log.Println(err)
@@ -221,6 +225,17 @@ func (h Handler) Authentication(next http.Handler) http.Handler {
 		}
 		if uID <= 0 {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
+func (h Handler) IsLogin(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		userID := h.sessionManager.GetString(r.Context(), "userID")
+		if userID != "" {
+			http.Redirect(w, r, "/student", http.StatusSeeOther)
 			return
 		}
 		next.ServeHTTP(w, r)

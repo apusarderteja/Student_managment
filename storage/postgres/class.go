@@ -107,3 +107,13 @@ func (s PostgresStorage) GetclassIDByIDQuery(id string) (*storage.Class, error) 
 
 	return &u, nil
 }
+
+// Class ALready Exists Check
+func (p PostgresStorage) CheckClassExists(ClassName string) (bool, error) {
+	var Alreadyexists bool
+	err := p.DB.QueryRow(`SELECT exists(SELECT 1 FROM class WHERE class_name = $1 AND deleted_at IS NULL)`, ClassName).Scan(&Alreadyexists)
+	if err != nil {
+		return false, err
+	}
+	return Alreadyexists, nil
+}
